@@ -82,7 +82,7 @@ def showImage(request, img_uid):
     context = {
         'imageObject': imageObject,
         'AWS_STORAGE_BUCKET_URL': settings.AWS_STORAGE_BUCKET_URL, 
-        'disableDelete': 'disabled' if not canDelete else '',
+        'disableDelete': 'disabled' if not canDelete else ''  ,
     }
    
     return render(request, 'gallery/showImage.html', context)
