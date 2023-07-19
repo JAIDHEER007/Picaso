@@ -3,8 +3,8 @@
 {% block extraHead %}{% endblock %}
 
 {% block navItems %}
-<a class="nav-item nav-link active" href="/">Home</a>
-<a class="nav-item nav-link" href="{% url 'gallery:showGallery' %}">Gallery</a>
+<a class="btn btn-outline-dark bg-light" style="text-transform:none" href="/">Home</a>
+<a class="btn btn-outline-dark bg-light" style="text-transform:none" href="{% url 'gallery:showGallery' %}">Gallery</a>
 {% if user.is_authenticated %}
     {% include '../logout_form.html' %}
 {% else %}
