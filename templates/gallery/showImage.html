@@ -1,6 +1,13 @@
 {% extends "../base.html" %}
 {% block title %}Image {{ imageObject.img_uid }}{% endblock %}
-{% block extraHead %}{% endblock %}
+{% block extraHead %}
+<style>
+    button:disabled {
+        cursor: not-allowed;
+        pointer-events: all !important;
+    }
+</style>
+{% endblock %}
 
 {% block navItems %}
 <a class="btn btn-outline-dark bg-light" style="text-transform:none" href="/">Home</a>
