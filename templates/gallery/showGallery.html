@@ -1,0 +1,62 @@
+{% extends "../base.html" %}
+
+{% load static %}
+{%load crispy_forms_tags %} 
+
+{% block title %}Gallery{% endblock %}
+{% block extraHead %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="{% static 'gallery/showGallery.css' %}">
+<script src="{% static 'gallery/autoSlot.js' %}"></script>
+{% endblock %}
+
+{% block navItems %}
+<a class="nav-item nav-link active" href="/">Home</a>
+{% if user.is_authenticated %}
+    {% include '../logout_form.html' %}
+{% else %}
+    {% include '../login_form.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if not bypassOpenAISwitch %}
+<div class="d-flex justify-content-center p-2">
+    <form action="{% url 'gallery:showGallery' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <div class="text-center">
+            <input type="submit" value="Submit">
+        </div>
+        
+    </form>
+</div>
+{% else %}
+<p class="h3 text-center">
+    Sorry for the inconvenience! Open AI Image generation has been disabled due to Exceeded qouta!
+</p>
+{% endif %}
+
+<!-- Gallery -->
+{% if imageObjects %}
+<div class="container page-top">
+    <div class="row">
+        {% for imageObject in imageObjects %}
+            <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                <a href="{% url 'gallery:showImage' imageObject.img_uid %}" class="fancybox" rel="ligthbox">
+                    <img  src="{{ AWS_STORAGE_BUCKET_URL }}{{ imageObject.img_uid }}.png" class="zoom img-fluid" alt="">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+<div>
+{% endif %}
+
+{% endblock %}
+{% block extraBody %}
+
+{% endblock %}
+

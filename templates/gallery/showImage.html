@@ -1,0 +1,54 @@
+{% extends "../base.html" %}
+{% block title %}Image {{ imageObject.img_uid }}{% endblock %}
+{% block extraHead %}{% endblock %}
+
+{% block navItems %}
+<a class="nav-item nav-link active" href="/">Home</a>
+<a class="nav-item nav-link" href="{% url 'gallery:showGallery' %}">Gallery</a>
+{% if user.is_authenticated %}
+    {% include '../logout_form.html' %}
+{% else %}
+    {% include '../login_form.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="text-center p-2">
+    <img src="{{ AWS_STORAGE_BUCKET_URL }}{{ imageObject.img_uid }}.png" class="img-fluid center">
+</div>
+<div class="text-center p-2">
+    <p>{{ imageObject.img_prompt }}</p>
+</div>
+<div class="text-center p-2">
+    <button onclick="makeDeleteRequest()" class="btn btn-secondary" {{ disableDelete }}>Delete</button>    
+</div>
+<div class="text-center p-2">
+    <a class="btn btn-danger" role="button" href="{{ AWS_STORAGE_BUCKET_URL }}{{ imageObject.img_uid }}.png" download="{{ imageObject.img_uid }}.png">Open Image</a>
+</div>
+<script>
+    function makeDeleteRequest(){
+        let url = "{% url 'gallery:showImage' imageObject.img_uid %}"
+        let options = {
+            method: "DELETE",
+            headers: { 
+                credentials: 'same-origin',
+                "X-CSRFToken": '{{csrf_token}}', 
+            },
+        }
+        fetch(url, options)
+        .then(response => {
+            if(response.status == 204){
+                alert("Image {{ imageObject.img_uid }} Deleted Successfully!");
+                window.location.href = "{% url 'gallery:showGallery' %}";
+
+            }else if(response.status == 401){
+                alert("Cannot delete Image {{ imageObject.img_uid }}. Not authenticated!");
+            }else if(response.status == 402){
+                alert("Failed to delete Image {{ imageObject.img_uid }} from S3 bucket");
+            }else{
+                alert("Image {{ imageObject.img_uid }} failed to delete!");
+            }
+        })
+    }
+</script>
+{% endblock %}

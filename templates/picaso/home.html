@@ -1,0 +1,22 @@
+{% extends "../base.html" %}
+{% block title %}Picaso{% endblock %}
+
+{% block navItems %}
+    <a class="nav-item nav-link" href="{% url 'gallery:showGallery' %}">Gallery</a>
+{% if user.is_authenticated %}
+    {% include '../logout_form.html' %}
+{% else %}
+    {% include '../login_form.html' %}
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<p class="h3">
+    Picaso Image Generator
+</p>
+<p class="h4">
+    Open AI's DALL-E Image Generator to produce perfectly modelled images from a text prompt
+</p>
+
+{% endblock %}
